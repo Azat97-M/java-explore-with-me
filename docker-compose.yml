@@ -32,26 +32,38 @@ services:
       retries: 5
 
   ewm-service:
-    image: alpine
+    build:
+      context: ./main-service
+      dockerfile: Dockerfile
     container_name: ewm-service
-    command: sleep infinity
     ports:
       - "8080:8080"
-    depends_on:
-      - ewm-db
-
-  ewm-db:
-    image: postgres:16.1
-    container_name: ewm-db
     environment:
-      - POSTGRES_DB=ewm
-      - POSTGRES_USER=ewm
-      - POSTGRES_PASSWORD=ewm_password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main
+      - SPRING_DATASOURCE_USERNAME=main
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - STATS_SERVER_URL=http://stats-server:9090
+    depends_on:
+      main-db:
+        condition: service_healthy
+
+  main-db:
+    image: postgres:16.1
+    container_name: main-db
+    environment:
+      - POSTGRES_DB=main
+      - POSTGRES_USER=main
+      - POSTGRES_PASSWORD=12345
     ports:
       - "5432:5432"
     volumes:
-      - ewm_db_data:/var/lib/postgresql/data
+      - main_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U main -d main" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   stats_db_data:
-  ewm_db_data:
+  main_db_data:
