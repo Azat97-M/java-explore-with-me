@@ -24,8 +24,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "WHERE (:users IS NULL OR e.initiator.id IN :users) " +
             "AND (:states IS NULL OR e.state IN :states) " +
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
-            "AND (:start IS NULL OR e.eventDate >= :start) " +
-            "AND (:end IS NULL OR e.eventDate <= :end)")
+            "AND (CAST(:start AS timestamp) IS NULL OR e.eventDate >= :start) " +
+            "AND (CAST(:end AS timestamp) IS NULL OR e.eventDate <= :end)")
     Page<Event> findEventsByAdmin(@Param("users") List<Long> users,
                                   @Param("states") List<EventState> states,
                                   @Param("categories") List<Long> categories,
@@ -35,8 +35,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
+            "AND (:text IS NULL OR ( LOWER(e.annotation) LIKE LOWER(CONCAT('%', CAST(:text AS string), '%')) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', CAST(:text AS string), '%')))) " +
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
             "AND (e.eventDate >= :start) " +
@@ -52,16 +52,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
+            "AND (:text IS NULL OR ( LOWER(e.annotation) LIKE LOWER(CONCAT('%', CAST(:text AS string), '%')) " +
+            "OR LOWER(e.description) LIKE LOWER(CONCAT('%', CAST(:text AS string), '%')))) " +
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
-            "AND (e.eventDate >= :now) " +
             "AND (:onlyAvailable = false OR e.participantLimit = 0 OR e.confirmedRequests < e.participantLimit)")
     Page<Event> findEventsPublicWithoutDates(@Param("text") String text,
                                              @Param("categories") List<Long> categories,
                                              @Param("paid") Boolean paid,
-                                             @Param("now") LocalDateTime now,
                                              @Param("onlyAvailable") Boolean onlyAvailable,
                                              Pageable pageable);
 }

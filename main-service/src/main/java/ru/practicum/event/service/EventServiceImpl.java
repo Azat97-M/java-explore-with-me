@@ -183,6 +183,10 @@ public class EventServiceImpl implements EventService {
 
         List<Event> events = eventRepository.findEventsByAdmin(users, states, categories, start, end, pageable).getContent();
 
+        if (events.isEmpty()) {
+            return List.of();
+        }
+
         loadConfirmedRequests(events);
         loadViewsForList(events);
 
@@ -258,6 +262,7 @@ public class EventServiceImpl implements EventService {
         if (size <= 0) {
             pageSize = 10;
         }
+
         Pageable pageable = PageRequest.of(from / pageSize, pageSize);
 
         List<Event> events;
@@ -272,8 +277,12 @@ public class EventServiceImpl implements EventService {
             ).getContent();
         } else {
             events = eventRepository.findEventsPublicWithoutDates(
-                    text, categories, paid, LocalDateTime.now(), checkOnlyAvailable, pageable
+                    text, categories, paid, checkOnlyAvailable, pageable
             ).getContent();
+        }
+
+        if (events.isEmpty()) {
+            return List.of();
         }
 
         loadViewsForList(events);
@@ -353,7 +362,12 @@ public class EventServiceImpl implements EventService {
 
     private void loadViews(Event event) {
         try {
-            String start = event.getCreatedOn().format(FORMATTER);
+            LocalDateTime createdDate = event.getCreatedOn();
+            if (createdDate == null) {
+                createdDate = LocalDateTime.now().minusDays(1);
+            }
+            String start = createdDate.format(FORMATTER);
+
             String end = LocalDateTime.now().plusYears(10).format(FORMATTER);
 
             var response = statsClient.getStats(start, end, List.of("/events/" + event.getId()), true);
