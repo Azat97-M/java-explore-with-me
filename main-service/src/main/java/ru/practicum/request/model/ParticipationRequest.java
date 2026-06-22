@@ -10,10 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
@@ -21,7 +18,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "participation_requests")
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"event", "requester"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,4 +44,17 @@ public class ParticipationRequest {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 50)
     private RequestStatus status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParticipationRequest that = (ParticipationRequest) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

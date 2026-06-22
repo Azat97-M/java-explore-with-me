@@ -117,6 +117,8 @@ public class RequestServiceImpl implements RequestService {
             }
         }
 
+        requestRepository.saveAll(requests);
+
         return EventRequestStatusUpdateResult.builder()
                 .confirmedRequests(confirmed)
                 .rejectedRequests(rejected)
@@ -131,7 +133,6 @@ public class RequestServiceImpl implements RequestService {
 
     private void processRejection(ParticipationRequest req, List<ParticipationRequestDto> rejected) {
         req.setStatus(RequestStatus.REJECTED);
-        requestRepository.save(req);
         rejected.add(RequestMapper.toParticipationRequestDto(req));
     }
 
@@ -140,14 +141,12 @@ public class RequestServiceImpl implements RequestService {
                                      List<ParticipationRequestDto> rejected) {
         if (isParticipantLimitReached(event)) {
             req.setStatus(RequestStatus.REJECTED);
-            requestRepository.save(req);
             rejected.add(RequestMapper.toParticipationRequestDto(req));
             throw new ConflictException("Достигнут лимит мест на данное событие");
         }
 
         req.setStatus(RequestStatus.CONFIRMED);
         incrementConfirmedRequests(event);
-        requestRepository.save(req);
         confirmed.add(RequestMapper.toParticipationRequestDto(req));
     }
 
