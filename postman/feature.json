@@ -1,9 +1,10 @@
 {
   "info": {
-    "_postman_id": "4f622f31-328a-4506-95bd-66359cfbe749",
+    "_postman_id": "b1fc847c-2bf9-49dc-8b91-e320951bb2fe",
     "name": "Explore With Me - Comments Feature Tests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "23073145"
+    "_exporter_id": "56040451",
+    "_collection_link": "https://go.postman.co/collection/56040451-b1fc847c-2bf9-49dc-8b91-e320951bb2fe?source=collection_link"
   },
   "item": [
     {
@@ -24,14 +25,27 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"name\": \"Иван Петров\",\n  \"email\": \"ivan.petrov@mail.ru\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/admin/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Подготовка данных - Создание второго пользователя",
@@ -51,14 +65,27 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"name\": \"Алексей Смирнов\",\n  \"email\": \"alex.smirnov@mail.ru\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/admin/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "users"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Подготовка данных - Создание категории",
@@ -78,14 +105,27 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"name\": \"Концерты\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/admin/categories", "host": ["{{baseUrl}}"], "path": ["admin", "categories"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/admin/categories",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "categories"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Подготовка данных - Создание события организатором",
@@ -104,28 +144,56 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"annotation\": \"рок фест на выходных вдвоем\",\n  \"category\": {{commentCatId}},\n  \"description\": \"рок фест на выходных вдвоем до вечера\",\n  \"eventDate\": \"2027-08-25 15:00:00\",\n  \"location\": { \"lat\": 55.7558, \"lon\": 37.6173 },\n  \"paid\": false,\n  \"participantLimit\": 0,\n  \"requestModeration\": false,\n  \"title\": \"рок фест на выходных\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/users/{{commentAuthorId}}/events", "host": ["{{baseUrl}}"], "path": ["users", "{{commentAuthorId}}", "events"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/users/{{commentAuthorId}}/events",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{commentAuthorId}}",
+            "events"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Подготовка данных - Публикация события админом",
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"stateAction\": \"PUBLISH_EVENT\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/admin/events/{{commentEventId}}", "host": ["{{baseUrl}}"], "path": ["admin", "events", "{{commentEventId}}"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/admin/events/{{commentEventId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "events",
+            "{{commentEventId}}"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Создание комментария пользователем",
@@ -146,7 +214,10 @@
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
@@ -154,13 +225,23 @@
         },
         "url": {
           "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments?eventId={{commentEventId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["users", "{{commentAuthorId}}", "comments"],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{commentAuthorId}}",
+            "comments"
+          ],
           "query": [
-            { "key": "eventId", "value": "{{commentEventId}}" }
+            {
+              "key": "eventId",
+              "value": "{{commentEventId}}"
+            }
           ]
         }
-      }
+      },
+      "response": []
     },
     {
       "name": "Публичное получение комментариев к событию",
@@ -179,8 +260,20 @@
       ],
       "request": {
         "method": "GET",
-        "url": { "raw": "{{baseUrl}}/events/{{commentEventId}}/comments", "host": ["{{baseUrl}}"], "path": ["events", "{{commentEventId}}", "comments"] }
-      }
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/events/{{commentEventId}}/comments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "events",
+            "{{commentEventId}}",
+            "comments"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Редактирование комментария автором",
@@ -200,14 +293,29 @@
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"text\": \"здорово, пошли\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments/{{activeCommentId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{commentAuthorId}}", "comments", "{{activeCommentId}}"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments/{{activeCommentId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{commentAuthorId}}",
+            "comments",
+            "{{activeCommentId}}"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Попытка изменить чужой комментарий (Ожидается 409)",
@@ -225,14 +333,29 @@
       "request": {
         "method": "PATCH",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
         ],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"text\": \"пытаюсь поменять чужой текст\"\n}"
         },
-        "url": { "raw": "{{baseUrl}}/users/{{commentStrangerId}}/comments/{{activeCommentId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{commentStrangerId}}", "comments", "{{activeCommentId}}"] }
-      }
+        "url": {
+          "raw": "{{baseUrl}}/users/{{commentStrangerId}}/comments/{{activeCommentId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "users",
+            "{{commentStrangerId}}",
+            "comments",
+            "{{activeCommentId}}"
+          ]
+        }
+      },
+      "response": []
     },
     {
       "name": "Удаление комментария администратором",
@@ -249,15 +372,42 @@
       ],
       "request": {
         "method": "DELETE",
-        "url": { "raw": "{{baseUrl}}/admin/comments/{{activeCommentId}}", "host": ["{{baseUrl}}"], "path": ["admin", "comments", "{{activeCommentId}}"] }
-      }
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/admin/comments/{{activeCommentId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "admin",
+            "comments",
+            "{{activeCommentId}}"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
-    { "key": "commentAuthorId", "value": "" },
-    { "key": "commentStrangerId", "value": "" },
-    { "key": "commentCatId", "value": "" },
-    { "key": "commentEventId", "value": "" },
-    { "key": "activeCommentId", "value": "" }
+    {
+      "key": "commentAuthorId",
+      "value": ""
+    },
+    {
+      "key": "commentStrangerId",
+      "value": ""
+    },
+    {
+      "key": "commentCatId",
+      "value": ""
+    },
+    {
+      "key": "commentEventId",
+      "value": ""
+    },
+    {
+      "key": "activeCommentId",
+      "value": ""
+    }
   ]
 }
