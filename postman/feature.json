@@ -1,0 +1,263 @@
+{
+  "info": {
+    "_postman_id": "4f622f31-328a-4506-95bd-66359cfbe749",
+    "name": "Explore With Me - Comments Feature Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23073145"
+  },
+  "item": [
+    {
+      "name": "Подготовка данных - Создание пользователя автора",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 201\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"commentAuthorId\", json.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Иван Петров\",\n  \"email\": \"ivan.petrov@mail.ru\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+      }
+    },
+    {
+      "name": "Подготовка данных - Создание второго пользователя",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 201\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"commentStrangerId\", json.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Алексей Смирнов\",\n  \"email\": \"alex.smirnov@mail.ru\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+      }
+    },
+    {
+      "name": "Подготовка данных - Создание категории",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 201\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"commentCatId\", json.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Концерты\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/admin/categories", "host": ["{{baseUrl}}"], "path": ["admin", "categories"] }
+      }
+    },
+    {
+      "name": "Подготовка данных - Создание события организатором",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set(\"commentEventId\", json.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"annotation\": \"рок фест на выходных вдвоем\",\n  \"category\": {{commentCatId}},\n  \"description\": \"рок фест на выходных вдвоем до вечера\",\n  \"eventDate\": \"2027-08-25 15:00:00\",\n  \"location\": { \"lat\": 55.7558, \"lon\": 37.6173 },\n  \"paid\": false,\n  \"participantLimit\": 0,\n  \"requestModeration\": false,\n  \"title\": \"рок фест на выходных\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/users/{{commentAuthorId}}/events", "host": ["{{baseUrl}}"], "path": ["users", "{{commentAuthorId}}", "events"] }
+      }
+    },
+    {
+      "name": "Подготовка данных - Публикация события админом",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"stateAction\": \"PUBLISH_EVENT\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/admin/events/{{commentEventId}}", "host": ["{{baseUrl}}"], "path": ["admin", "events", "{{commentEventId}}"] }
+      }
+    },
+    {
+      "name": "Создание комментария пользователем",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 201 Created\", function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.test(\"Текст совпадает\", function () { pm.expect(json.text).to.equal(\"А кто исполнитель?\"); });",
+              "pm.collectionVariables.set(\"activeCommentId\", json.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"А кто исполнитель?\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments?eventId={{commentEventId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["users", "{{commentAuthorId}}", "comments"],
+          "query": [
+            { "key": "eventId", "value": "{{commentEventId}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Публичное получение комментариев к событию",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 200 OK\", function () { pm.response.to.have.status(200); });",
+              "var json = pm.response.json();",
+              "pm.test(\"Массив не пустой\", function () { pm.expect(json.length).to.be.at.least(1); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/events/{{commentEventId}}/comments", "host": ["{{baseUrl}}"], "path": ["events", "{{commentEventId}}", "comments"] }
+      }
+    },
+    {
+      "name": "Редактирование комментария автором",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 200 OK\", function () { pm.response.to.have.status(200); });",
+              "var json = pm.response.json();",
+              "pm.test(\"Текст успешно изменен\", function () { pm.expect(json.text).to.equal(\"здорово, пошли\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"здорово, пошли\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments/{{activeCommentId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{commentAuthorId}}", "comments", "{{activeCommentId}}"] }
+      }
+    },
+    {
+      "name": "Попытка изменить чужой комментарий (Ожидается 409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 409 Conflict\", function () { pm.response.to.have.status(409); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"пытаюсь поменять чужой текст\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/users/{{commentStrangerId}}/comments/{{activeCommentId}}", "host": ["{{baseUrl}}"], "path": ["users", "{{commentStrangerId}}", "comments", "{{activeCommentId}}"] }
+      }
+    },
+    {
+      "name": "Удаление комментария администратором",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Статус 204 No Content\", function () { pm.response.to.have.status(204); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "{{baseUrl}}/admin/comments/{{activeCommentId}}", "host": ["{{baseUrl}}"], "path": ["admin", "comments", "{{activeCommentId}}"] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "commentAuthorId", "value": "" },
+    { "key": "commentStrangerId", "value": "" },
+    { "key": "commentCatId", "value": "" },
+    { "key": "commentEventId", "value": "" },
+    { "key": "activeCommentId", "value": "" }
+  ]
+}
