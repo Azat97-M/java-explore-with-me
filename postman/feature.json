@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "b1fc847c-2bf9-49dc-8b91-e320951bb2fe",
-    "name": "Explore With Me - Comments Feature Tests",
+    "name": "feature",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "56040451",
     "_collection_link": "https://go.postman.co/collection/56040451-b1fc847c-2bf9-49dc-8b91-e320951bb2fe?source=collection_link"
@@ -14,11 +14,32 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 201\", function () { pm.response.to.have.status(201); });",
-              "var json = pm.response.json();",
-              "pm.collectionVariables.set(\"commentAuthorId\", json.id);"
+              "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {",
+              "    pm.response.to.have.status(201);",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const source = JSON.parse(pm.request.body.raw);",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Пользователь должен содержать поля: id, name, email\", function () {",
+              "    pm.expect(target).to.have.property('id');",
+              "    pm.expect(target).to.have.property('name');",
+              "    pm.expect(target).to.have.property('email');",
+              "});",
+              "",
+              "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
+              "    pm.expect(target.id).to.not.be.null;",
+              "    pm.expect(source.name).equal(target.name);",
+              "    pm.expect(source.email).equal(target.email);",
+              "});",
+              "",
+              "pm.collectionVariables.set(\"commentAuthorId\", target.id);"
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -35,10 +56,12 @@
           "raw": "{\n  \"name\": \"Иван Петров\",\n  \"email\": \"ivan.petrov@mail.ru\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/admin/users",
+          "raw": "http://localhost:8080/admin/users",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "admin",
             "users"
@@ -54,11 +77,33 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 201\", function () { pm.response.to.have.status(201); });",
-              "var json = pm.response.json();",
-              "pm.collectionVariables.set(\"commentStrangerId\", json.id);"
+              "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {",
+              "    pm.response.to.have.status(201);",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const source = JSON.parse(pm.request.body.raw);",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Пользователь должен содержать поля: id, name, email\", function () {",
+              "    pm.expect(target).to.have.property('id');",
+              "    pm.expect(target).to.have.property('name');",
+              "    pm.expect(target).to.have.property('email');",
+              "});",
+              "",
+              "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
+              "    pm.expect(target.id).to.not.be.null;",
+              "    pm.expect(source.name).equal(target.name);",
+              "    pm.expect(source.email).equal(target.email);",
+              "});",
+              "",
+              "pm.collectionVariables.set(\"commentStrangerId\", target.id);",
+              ""
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -75,10 +120,12 @@
           "raw": "{\n  \"name\": \"Алексей Смирнов\",\n  \"email\": \"alex.smirnov@mail.ru\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/admin/users",
+          "raw": "http://localhost:8080/admin/users",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "admin",
             "users"
@@ -94,11 +141,30 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 201\", function () { pm.response.to.have.status(201); });",
-              "var json = pm.response.json();",
-              "pm.collectionVariables.set(\"commentCatId\", json.id);"
+              "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {",
+              "    pm.response.to.have.status(201);",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const source = JSON.parse(pm.request.body.raw);",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Категория должна содержать поля: id, name\", function () {",
+              "    pm.expect(target).to.have.property('id');",
+              "    pm.expect(target).to.have.property('name');",
+              "});",
+              "",
+              "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
+              "    pm.expect(target.id).to.not.be.null;",
+              "    pm.expect(source.name).equal(target.name);",
+              "});",
+              "",
+              "pm.collectionVariables.set(\"commentCatId\", target.id);"
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -115,10 +181,12 @@
           "raw": "{\n  \"name\": \"Концерты\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/admin/categories",
+          "raw": "http://localhost:8080/admin/categories",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "admin",
             "categories"
@@ -134,10 +202,37 @@
           "listen": "test",
           "script": {
             "exec": [
-              "var json = pm.response.json();",
-              "pm.collectionVariables.set(\"commentEventId\", json.id);"
+              "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {",
+              "    pm.response.to.be.success;",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const source = JSON.parse(pm.request.body.raw);",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Событие должно содержать поля: id, title, annotation, description, category\", function () {",
+              "    pm.expect(target).to.have.property('id');",
+              "    pm.expect(target).to.have.property('title');",
+              "    pm.expect(target).to.have.property('annotation');",
+              "    pm.expect(target).to.have.property('description');",
+              "    pm.expect(target).to.have.property('category');",
+              "});",
+              "",
+              "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
+              "    pm.expect(target.id).to.not.be.null;",
+              "    pm.expect(source.title).equal(target.title);",
+              "    pm.expect(source.annotation).equal(target.annotation);",
+              "    pm.expect(source.description).equal(target.description);",
+              "    pm.expect(source.category).equal(target.category.id);",
+              "});",
+              "",
+              "pm.collectionVariables.set(\"commentEventId\", target.id);",
+              ""
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -154,10 +249,12 @@
           "raw": "{\n  \"annotation\": \"рок фест на выходных вдвоем\",\n  \"category\": {{commentCatId}},\n  \"description\": \"рок фест на выходных вдвоем до вечера\",\n  \"eventDate\": \"2027-08-25 15:00:00\",\n  \"location\": { \"lat\": 55.7558, \"lon\": 37.6173 },\n  \"paid\": false,\n  \"participantLimit\": 0,\n  \"requestModeration\": false,\n  \"title\": \"рок фест на выходных\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/users/{{commentAuthorId}}/events",
+          "raw": "http://localhost:8080/users/{{commentAuthorId}}/events",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "users",
             "{{commentAuthorId}}",
@@ -169,6 +266,29 @@
     },
     {
       "name": "Подготовка данных - Публикация события админом",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "});\r",
+              "\r",
+              "const target = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Статус события должен измениться на PUBLISHED\", function () {\r",
+              "    pm.expect(target.state).equal(\"PUBLISHED\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
       "request": {
         "method": "PATCH",
         "header": [
@@ -182,10 +302,12 @@
           "raw": "{\n  \"stateAction\": \"PUBLISH_EVENT\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/admin/events/{{commentEventId}}",
+          "raw": "http://localhost:8080/admin/events/{{commentEventId}}",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "admin",
             "events",
@@ -202,12 +324,34 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 201 Created\", function () { pm.response.to.have.status(201); });",
-              "var json = pm.response.json();",
-              "pm.test(\"Текст совпадает\", function () { pm.expect(json.text).to.equal(\"А кто исполнитель?\"); });",
-              "pm.collectionVariables.set(\"activeCommentId\", json.id);"
+              "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {",
+              "    pm.response.to.have.status(201);",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const source = JSON.parse(pm.request.body.raw);",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Комментарий должен содержать поля: id, text, eventId, authorName, created\", function () {",
+              "    pm.expect(target).to.have.property('id');",
+              "    pm.expect(target).to.have.property('text');",
+              "    pm.expect(target).to.have.property('eventId');",
+              "    pm.expect(target).to.have.property('authorName');",
+              "    pm.expect(target).to.have.property('created');",
+              "});",
+              "",
+              "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
+              "    pm.expect(target.id).to.not.be.null;",
+              "    pm.expect(source.text).equal(target.text);",
+              "    pm.expect(target.eventId).equal(pm.collectionVariables.get(\"commentEventId\"));",
+              "});",
+              "",
+              "pm.collectionVariables.set(\"activeCommentId\", target.id);"
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -224,10 +368,12 @@
           "raw": "{\n  \"text\": \"А кто исполнитель?\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments?eventId={{commentEventId}}",
+          "raw": "http://localhost:8080/users/{{commentAuthorId}}/comments?eventId={{commentEventId}}",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "users",
             "{{commentAuthorId}}",
@@ -250,11 +396,28 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 200 OK\", function () { pm.response.to.have.status(200); });",
-              "var json = pm.response.json();",
-              "pm.test(\"Массив не пустой\", function () { pm.expect(json.length).to.be.at.least(1); });"
+              "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {",
+              "    pm.response.to.be.ok;",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Ответ содержит массив комментариев\", function () {",
+              "    pm.expect(target).is.an('array');",
+              "    pm.expect(target.length).to.be.at.least(1);",
+              "});",
+              "",
+              "pm.test(\"Данные первого комментария корректны\", function () {",
+              "    pm.expect(target[0].id).equal(pm.collectionVariables.get(\"activeCommentId\"));",
+              "    pm.expect(target[0].text).equal(\"А кто исполнитель?\");",
+              "});",
+              ""
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -262,10 +425,12 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/events/{{commentEventId}}/comments",
+          "raw": "http://localhost:8080/events/{{commentEventId}}/comments",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "events",
             "{{commentEventId}}",
@@ -282,11 +447,23 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 200 OK\", function () { pm.response.to.have.status(200); });",
-              "var json = pm.response.json();",
-              "pm.test(\"Текст успешно изменен\", function () { pm.expect(json.text).to.equal(\"здорово, пошли\"); });"
+              "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {",
+              "    pm.response.to.be.ok;",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const source = JSON.parse(pm.request.body.raw);",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Текст комментария успешно обновился\", function () {",
+              "    pm.expect(target.text).equal(source.text);",
+              "});",
+              ""
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -303,10 +480,12 @@
           "raw": "{\n  \"text\": \"здорово, пошли\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/users/{{commentAuthorId}}/comments/{{activeCommentId}}",
+          "raw": "http://localhost:8080/users/{{commentAuthorId}}/comments/{{activeCommentId}}",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "users",
             "{{commentAuthorId}}",
@@ -324,8 +503,20 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 409 Conflict\", function () { pm.response.to.have.status(409); });"
+              "pm.test(\"Статус ответа должен быть 409 Conflict\", function () {\r",
+              "    pm.response.to.have.status(409);\r",
+              "});\r",
+              ""
             ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
             "type": "text/javascript"
           }
         }
@@ -343,10 +534,12 @@
           "raw": "{\n  \"text\": \"пытаюсь поменять чужой текст\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/users/{{commentStrangerId}}/comments/{{activeCommentId}}",
+          "raw": "http://localhost:8080/users/{{commentStrangerId}}/comments/{{activeCommentId}}",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "users",
             "{{commentStrangerId}}",
@@ -364,9 +557,14 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Статус 204 No Content\", function () { pm.response.to.have.status(204); });"
+              "pm.test(\"Ответ должен содержать код статуса 204 No Content\", function () {\r",
+              "    pm.response.to.have.status(204);\r",
+              "});\r",
+              ""
             ],
-            "type": "text/javascript"
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -374,10 +572,12 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/admin/comments/{{activeCommentId}}",
+          "raw": "http://localhost:8080/admin/comments/{{activeCommentId}}",
+          "protocol": "http",
           "host": [
-            "{{baseUrl}}"
+            "localhost"
           ],
+          "port": "8080",
           "path": [
             "admin",
             "comments",
